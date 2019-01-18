@@ -53,7 +53,20 @@ app.post('/register',(req,res)=>{     //Register
 	})
 });
 
+app.get('/login',(req,res)=>{
+	res.render("login");
+});
+app.post('/login', passport.authenticate("local",{
+	successRedirect: "/secret",
+	failureRedirect: "/login"
+}), (req,res)=>{
+	console.log("User login Success");
+});
 
+app.get('/logout',(req,res)=>{
+	req.logout();
+	res.redirect('/');
+})
 
 app.listen(3000, ()=>{
 	console.log("server is started..")
