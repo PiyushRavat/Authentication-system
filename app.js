@@ -24,9 +24,17 @@ app.use('/public',express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize())
 app.use(passport.session());
 
+//Session
 passport.use(new Localstrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+ 
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function (err, user) {
+    done(err, user);
+  });
+});
  
  //Routes
 app.get('/',(req,res)=>{
